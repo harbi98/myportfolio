@@ -266,7 +266,7 @@ export default function Home() {
             <div className="contact-details flex flex-col mt-8 md:flex-row">
                 <div>
                     <h3 className="text-2xl">Email</h3>
-                    <p><a href="mailto:youremail@example.com">jimenezjanharvey@example.com</a></p>
+                    <p><a href="mailto:jimenezjanharvey@gmail.com">jimenezjanharvey@gmail.com</a></p>
                 </div>
                 <div>
                     <h3 className="text-2xl">Phone</h3>
