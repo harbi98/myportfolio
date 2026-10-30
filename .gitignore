@@ -15,7 +15,7 @@
 
 # next.js
 /.next/
-/out/
+# /out/ is committed: Cloudflare Pages serves it directly (no build step)
 
 # production
 /build
