@@ -1,34 +1,47 @@
 "use client";
-import { useState } from "react";
+import { useRef } from "react";
 
-export default function Modal({ title, children, buttonText = "Learn More" }) {
-  const [isOpen, setIsOpen] = useState(false);
+// Accessible project-details dialog built on the native <dialog> element:
+// focus is trapped, Esc closes it, and clicking the backdrop closes it.
+export default function Modal({ title, eyebrow, children, buttonText = "Details" }) {
+  const ref = useRef(null);
+
+  const close = () => ref.current?.close();
 
   return (
     <>
-      {/* Open Modal Button */}
-      <button
-        onClick={() => setIsOpen(true)}
-        className="button"
-      >
+      <button type="button" className="btn btn-ghost" onClick={() => ref.current?.showModal()}>
         {buttonText}
+        <span aria-hidden="true">↗</span>
       </button>
 
-      {/* Modal Overlay */}
-      {isOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white text-black p-6 rounded-lg w-96 shadow-lg">
-            {/* Modal Header */}
-            <div className="flex justify-between items-start mb-4">
-              <h2 className="text-4xl font-semibold">{title}</h2>
-              <button onClick={() => setIsOpen(false)} className="text-gray-500 hover:text-gray-800">
-                ✖
-              </button>
+      <dialog
+        ref={ref}
+        data-lenis-prevent // let the dialog scroll natively instead of through Lenis
+        aria-labelledby={`${title}-title`}
+        onClick={(e) => e.target === ref.current && close()}
+        className="m-auto w-[min(40rem,calc(100vw-2rem))] border border-line bg-card p-0 text-fg shadow-2xl"
+      >
+        <div className="max-h-[85vh] overflow-y-auto p-6 sm:p-8">
+          <div className="mb-6 flex items-start justify-between gap-6">
+            <div>
+              {eyebrow && <p className="eyebrow mb-2">{eyebrow}</p>}
+              <h3 id={`${title}-title`} className="font-mono text-2xl font-semibold tracking-tight sm:text-3xl">
+                {title}
+              </h3>
             </div>
-            <div>{children}</div>
+            <button
+              type="button"
+              onClick={close}
+              aria-label="Close"
+              className="shrink-0 border border-line px-2.5 py-1 font-mono text-sm text-muted hover:border-fg hover:text-fg"
+            >
+              Esc
+            </button>
           </div>
+          {children}
         </div>
-      )}
+      </dialog>
     </>
   );
 }
